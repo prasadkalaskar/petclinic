@@ -2,7 +2,7 @@ pipeline {
   agent any
     tools {
       maven 'maven3'
-                 jdk 'JDK8'
+      jdk 'JDK8'
     }
     stages {      
         stage('Build maven ') {
@@ -26,20 +26,17 @@ pipeline {
                  docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                  customImage.push("${env.BUILD_NUMBER}")
                  }                     
+               }
            }
-        }
 	  }
 
-	    stage{
-
-	        script{
-                        sh "cat deployment.yaml"
-                        sh "kubectl --kubeconfig=/home/ec2-user/config get pods"
-                        sh "kubectl --kubeconfig=/home/ec2-user/config apply -f deployment.yaml"
-
+	    stage (K8) {
+	        steps {
+	            script {
+	               sh 'pwd'
+                   sh 'cd Kubernetes'
+                }
 	        }
-
 	    }
-
     }
 }
