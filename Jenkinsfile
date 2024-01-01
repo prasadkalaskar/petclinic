@@ -35,6 +35,8 @@ pipeline {
 	            script {
 	               sh 'pwd'
                    sh 'cd Kubernetes'
+                   sh 'cd Kubernetes'
+                   sh 'cd Kubernetes'
                 }
 	        }
 	    }
