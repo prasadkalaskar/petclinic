@@ -4,39 +4,28 @@ pipeline {
       maven 'maven3'
       jdk 'JDK8'
     }
-    stages {      
+    stages {
         stage('Build maven ') {
-            steps { 
-                    sh 'pwd'      
+            steps {
+                    sh 'pwd'
                     sh 'mvn clean install -DskipTests'
             }
         }
-        
+
         stage('Copy Artifact') {
-           steps { 
+           steps {
                    sh 'pwd'
 		   sh 'cp -r target/*.jar docker'
            }
         }
-         
-        stage('Build docker image') {
-           steps {
-               script {         
-                 def customImage = docker.build('prasadkalaskar/mydevmac', "./docker")
-                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                 customImage.push("${env.BUILD_NUMBER}")
-                 }                     
-               }
-           }
-	  }
+
+
 
 	    stage (K8) {
 	        steps {
 	            script {
-	               sh 'pwd'
-                   sh 'cd Kubernetes'
-                   sh 'cd Kubernetes'
-                   sh 'cd Kubernetes'
+	               sh 'aws eks update-kubeconfig --name my-cluster --region eu-central-1'
+                   sh 'kubectl get ns'
                 }
 	        }
 	    }
