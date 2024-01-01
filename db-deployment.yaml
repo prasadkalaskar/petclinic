@@ -32,9 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  labels:
-    app: mysql
-    tier: database
+  namespace: default
 spec:
   selector: # mysql Pod Should contain same labels
     matchLabels:
@@ -56,8 +54,12 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value : root
+            - name: MYSQL_USER
+              value: petclinic
+            - name: MYSQL_PASSWORD
+              value: petclinic
             - name: MYSQL_DATABASE # Setting Database Name from a 'ConfigMap'
-              value : root
+              value : petclinic
           ports:
             - containerPort: 3306
               name: mysql
@@ -73,15 +75,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql  # DNS name
-  labels:
-    app: mysql
-    tier: database
+  name: mysql
+  namespace: default
 spec:
   ports:
     - port: 3306
       targetPort: 3306
-  selector:       # mysql Pod Should contain same labels
+      protocol: TCP
+  selector:
     app: mysql
-    tier: database
-  clusterIP: None  # We Use DNS, Thus ClusterIP is not relevant
+---
