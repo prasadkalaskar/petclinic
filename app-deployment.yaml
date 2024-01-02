@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pet-clinic
-          image: pet-clinic:latest
+          image: prasadkalaskar/pet-clinic:latest
           ports:
             - containerPort: 8080
           env:   # Setting Enviornmental Variables
