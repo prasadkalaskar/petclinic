@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-crud-deployment
+  name: pet-clinic
 spec:
   selector:
     matchLabels:
-      app: springboot-k8s-mysql
+      app: pet-clinic
   replicas: 3
   template:
     metadata:
       labels:
-        app: springboot-k8s-mysql
+        app: pet-clinic
     spec:
       containers:
-        - name: springboot-crud-k8s
-          image: springboot-crud-k8s:1.0
+        - name: pet-clinic
+          image: pet-clinic:1.0
           ports:
             - containerPort: 8080
           env:   # Setting Enviornmental Variables
