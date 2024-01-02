@@ -4,29 +4,35 @@ metadata:
   name: pet-clinic
   namespace: default
 spec:
+  replicas: 4
   selector:
     matchLabels:
       app: pet-clinic
-  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
         app: pet-clinic
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
         - name: pet-clinic
           image: prasadkalaskar/pet-clinic:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          env:   # Setting Enviornmental Variables
-            - name: DB_HOST   # Setting Database host address from configMap
-              value: mysql
-            - name: DB_NAME  # Setting Database name from configMap
-              value: petclinic
-            - name: DB_USERNAME  # Setting Database username from Secret
-              value : petclinic
-            - name: DB_PASSWORD # Setting Database password from Secret
-              value : petclinic
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128M
+            limits:
+              cpu: '256'
+              memory: 11400G
 ---
 
 apiVersion: v1 # Kubernetes API version
@@ -35,7 +41,7 @@ metadata: # Metadata of the resource kind we are creating
   name: springboot-crud-svc
 spec:
   selector:
-    app: springboot-k8s-mysql
+    app: pet-clinic
   ports:
     - protocol: "TCP"
       port: 8080 # The port that the service is running on in the cluster
