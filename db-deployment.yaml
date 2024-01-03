@@ -48,10 +48,6 @@ spec:
     spec:
       containers:
         - image: mysql:5.7 # image from docker-hub
-          lifecycle:
-            postStart:
-              exec:
-                command: [ "/bin/sh", "-c", "mysql -u root --password='root' -e \"GRANT ALL PRIVILEGES ON *.* TO 'petclinic'@'%' IDENTIFIED BY 'petclinic';\"" ]
           args:
             - "--ignore-db-dir=lost+found" # Workaround for https://github.com/docker-library/mysql/issues/186
           name: mysql
